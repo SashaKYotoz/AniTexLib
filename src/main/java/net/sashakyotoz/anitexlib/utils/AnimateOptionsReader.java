@@ -39,7 +39,7 @@ public class AnimateOptionsReader {
                 if (jsonObject != null) return jsonObject;
                 else AniTexLib.informUser("JsonObject is null", true);
             } catch (IOException e) {
-                AniTexLib.informUser(String.format("Impossible to read json with path %s", path), true);
+                AniTexLib.informUser(String.format("Impossible to read json with path %s/%s",modId, path), true);
             }
         } else
             AniTexLib.informUser(String.format("Impossible to find json with path %s", path), true);
@@ -71,7 +71,12 @@ public class AnimateOptionsReader {
         }
         return null;
     }
-
+    /**
+     * String modId - modid of your mod, (f.e. "examplemod")
+     * <p>
+     * UUID entityUUID - identifier of entity, its unique id (f.e. entity.getUUID())
+     * @return jsonObject of full properties for animation of textures' set if file exists
+     */
     public static JsonObject getObjectWithoutUpdate(String modId, UUID entityUUID) {
         try {
             Path configDir = FMLPaths.GAMEDIR.get().resolve(modId);

@@ -2,7 +2,9 @@ package net.sashakyotoz.anitexlib;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.sashakyotoz.anitexlib.utils.TextureAnimator;
 import org.slf4j.Logger;
 
@@ -14,6 +16,7 @@ public class AniTexLib {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public AniTexLib() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, net.sashakyotoz.anitexlib.ModConfig.SPEC);
         TextureAnimator.addEntityToAnimate(AniTexLib.class,MODID,"entity/pig_animated","pig_animated");
         TextureAnimator.getManagedAnimatedTextureByName(MODID,"/textures/entity/animated","animated",true,4,10,5, UUID.randomUUID());
         MinecraftForge.EVENT_BUS.register(this);
