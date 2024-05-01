@@ -15,6 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PigRendererMixin {
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/animal/Pig;)Lnet/minecraft/resources/ResourceLocation;", at=@At("RETURN"), cancellable = true)
     public void getTextureLocation(Pig pEntity, CallbackInfoReturnable<ResourceLocation> cir){
-        cir.setReturnValue((TextureAnimator.options.isEmpty() && !ModConfig.TO_SHOW_EXAMPLE.get()) ? new ResourceLocation("textures/entity/pig/pig.png") : TextureAnimator.getAnimatedTextureByName(AniTexLib.MODID,"textures/entity/pig_animated/","pig_animated"));
+        if (ModConfig.TO_SHOW_EXAMPLE.get())
+            cir.setReturnValue(TextureAnimator.options.isEmpty() ? new ResourceLocation("textures/entity/pig/pig.png") : TextureAnimator.getAnimatedTextureByName(AniTexLib.MODID,"textures/entity/pig_animated/","pig_animated"));
+//        ResourceLocation tmpLocation = AnimateOptionsReader.getObjectWithoutUpdate(AniTexLib.MODID,pEntity.getUUID()) == null ? TextureAnimator.getManagedAnimatedTextureByName(AniTexLib.MODID,"textures/entity/pig_animated/","pig_animated",pEntity.isOnGround(),0,10,4,pEntity.getUUID()) : TextureAnimator.getManagedAnimatedTextureByName(AniTexLib.MODID,null,null,null,null,null,null,pEntity.getUUID());
+//        cir.setReturnValue(tmpLocation != null ? tmpLocation : new ResourceLocation("textures/entity/pig/pig.png"));
     }
 }

@@ -126,8 +126,8 @@ public class AnimateOptionsReader {
                 if (entryObject.get("entityUUID").getAsString().equals(entityUUID.toString())) {
                     entryObject.addProperty("haveToContinueAnimation", haveToContinueAnimation);
                     entryObject.addProperty("stopFrame", stopFrame);
-                    entryObject.addProperty("interval_of_animation", stopFrame);
-                    entryObject.addProperty("amount_of_frames", stopFrame);
+                    entryObject.addProperty("interval_of_animation", interval);
+                    entryObject.addProperty("amount_of_frames", countOfFrames);
                     entryObject.addProperty("nameOfTexture", nameOfTexture);
                     entryObject.addProperty("textureFolder", textureFolder);
                     found = true;
@@ -140,6 +140,8 @@ public class AnimateOptionsReader {
                 newEntry.addProperty("entityUUID", entityUUID.toString());
                 newEntry.addProperty("haveToContinueAnimation", haveToContinueAnimation);
                 newEntry.addProperty("stopFrame", stopFrame);
+                newEntry.addProperty("interval_of_animation", interval);
+                newEntry.addProperty("amount_of_frames", countOfFrames);
                 newEntry.addProperty("nameOfTexture", nameOfTexture);
                 newEntry.addProperty("textureFolder", textureFolder);
                 entriesArray.add(newEntry);

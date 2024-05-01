@@ -8,7 +8,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue TO_SHOW_EXAMPLE;
     static {
         BUILDER.push("Configs for AniTexLib");
-        TO_SHOW_EXAMPLE = BUILDER.comment("Determine if example texture animation must be shown").define("to_show_example",true);
+        TO_SHOW_EXAMPLE = BUILDER.comment("Determine if example texture animation must be shown").define("to_show_example",false);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

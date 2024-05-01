@@ -1,7 +1,5 @@
 package net.sashakyotoz.anitexlib.utils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
@@ -72,6 +70,7 @@ public class TextureAnimator {
      * Example of returnment for getTextureLocation() in entity renderer
      */
     //AnimateOptionsReader.getObjectWithoutUpdate(modId,pEntity.getUUID()) == null ? TextureAnimator.getManagedAnimatedTextureByName(modId,"","",0,20,4,pEntity.getUUID()) : TextureAnimator.getManagedAnimatedTextureByName(modId,null,null,null,null,null,null,pEntity.getUUID());
+
     /**
      * String modId - modid of your mod, (f.e. "examplemod")
      * <p>
@@ -88,9 +87,9 @@ public class TextureAnimator {
         JsonObject object;
         if (path != null && name != null && toAnimate != null && stopFrame != null && interval != null && countOfFrames != null) {
             AnimateOptionsReader.manageDynamicJsonObject(modId, path, name, toAnimate, stopFrame, interval, countOfFrames, uuid);
+            return new ResourceLocation(modId, path + name + "0.png");
         } else {
-            frameValue.putIfAbsent(name, 0);
-            locations.putIfAbsent(name, new ResourceLocation(modId, path + name + "0.png"));
+            frameValue.putIfAbsent(uuid.toString(), 0);
             object = AnimateOptionsReader.getObjectWithoutUpdate(modId, uuid);
             if (object != null) {
                 int localStopFrame = object.get("stopFrame").getAsInt();
@@ -99,17 +98,24 @@ public class TextureAnimator {
                 boolean haveToContinueAnimation = object.get("haveToContinueAnimation").getAsBoolean();
                 String localNameOfTexture = object.get("nameOfTexture").getAsString();
                 String localTextureFolder = object.get("textureFolder").getAsString();
-                if (workQueue.size() < 1 && (localStopFrame > 0 && frameValue.get(uuid.toString()) < localStopFrame - 1) && haveToContinueAnimation)
-                    queueServerWork(localInterval, () -> {
-                        frameValue.put(name, frameValue.get(name) < framesAmount - 1 ? frameValue.get(name) + 1 : 0);
-                        AniTexLib.informUser(frameValue.get(uuid.toString()) + "", false);
-                        locations.put(name, new ResourceLocation(modId, path + name + frameValue.get(name) + ".png"));
-                    });
-                return locations.get(name) == null ? new ResourceLocation(modId, localTextureFolder + localNameOfTexture + "0.png") : locations.get(name);
+                locations.putIfAbsent(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + frameValue.get(uuid.toString()) + ".png"));
+                if (workQueue.size() < 1 && haveToContinueAnimation) {
+                    if (localStopFrame > 0)
+                        queueServerWork(localInterval, () -> {
+                            frameValue.put(uuid.toString(), frameValue.get(uuid.toString()) < localStopFrame - 1 ? frameValue.get(uuid.toString()) + 1 : localStopFrame);
+                            locations.put(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + frameValue.get(uuid.toString()) + ".png"));
+                        });
+                    else
+                        queueServerWork(localInterval, () -> {
+                            frameValue.put(uuid.toString(), frameValue.get(uuid.toString()) < framesAmount - 1 ? frameValue.get(uuid.toString()) + 1 : 0);
+                            locations.put(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + frameValue.get(uuid.toString()) + ".png"));
+                        });
+                }
+
+                return locations.get(uuid.toString()) == null ? new ResourceLocation(modId, localTextureFolder + localNameOfTexture + "0.png") : locations.get(uuid.toString());
             } else
-                return new ResourceLocation(modId, path + name + "0.png");
+                return null;
         }
-        return null;
     }
 
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
