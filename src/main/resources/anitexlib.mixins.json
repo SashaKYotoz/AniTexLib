@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "anitexlib.refmap.json",
   "mixins": [
+    "ItemEntityMixin"
   ],
   "client": [
     "PigRendererMixin"

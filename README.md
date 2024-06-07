@@ -22,6 +22,11 @@ How to work with animators:
 
 - In getTextureLocation() method in entity's renderer put AnimateOptionsReader.getObjectWithoutUpdate(modId,pEntity.getUUID()) == null ? TextureAnimator.getManagedAnimatedTextureByName(modId,"","",conditionWhenStopAnimation,someStopFrame,someInterval,someAmountOfFrames,entityUUID) : TextureAnimator.getManagedAnimatedTextureByName(modId,null,null,null,null,null,null,pEntity.getUUID());
 
+> Extra provided lib stuff:
+- New item implementation to invoke spawn of specific particle, when item lies on ground
+- Sparkle-like and Wisp-like particles and 3 new renderer types
+- Fluid flowing shader type for particles
+
 
 ## Authors
 
