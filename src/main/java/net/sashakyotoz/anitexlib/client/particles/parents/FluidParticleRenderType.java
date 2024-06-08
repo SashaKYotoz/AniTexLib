@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.sashakyotoz.anitexlib.ModConfig;
 import net.sashakyotoz.anitexlib.utils.render.RenderTypesHandler;
 import net.sashakyotoz.anitexlib.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
@@ -20,7 +21,7 @@ public class FluidParticleRenderType implements ParticleRenderType {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(RenderUtils::getFluidShader);
+        RenderSystem.setShader(ModConfig.USE_ADVANCED_PARTICLE_RENDERER.get() ? RenderUtils::getFluidShader : RenderSystem::getShader);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
         RenderTypesHandler.particleMVMatrix = RenderSystem.getModelViewMatrix();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);

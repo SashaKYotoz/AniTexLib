@@ -2,10 +2,8 @@ package net.sashakyotoz.anitexlib.utils.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -13,32 +11,14 @@ import net.minecraftforge.fml.ModList;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RenderTypesHandler {
     @OnlyIn(Dist.CLIENT)
     public static Matrix4f particleMVMatrix = null;
-    @OnlyIn(Dist.CLIENT)
-    public static List<ICustomRenderParticle> particleList = new ArrayList<>();
 
     public static void onRenderWorldLast(RenderLevelStageEvent event) {
-        PoseStack stack = event.getPoseStack();
-        float partialTicks = event.getPartialTick();
-        MultiBufferSource bufferDelayed = RenderTypesHandler.getDelayedRender();
-
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            stack.pushPose();
-            Vec3 pos = event.getCamera().getPosition();
-            stack.translate(-pos.x, -pos.y, -pos.z);
-            for (ICustomRenderParticle particle : particleList) {
-                particle.render(stack, bufferDelayed, partialTicks);
-            }
-            stack.popPose();
-            particleList.clear();
-        }
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
             RenderSystem.getModelViewStack().pushPose();
             RenderSystem.getModelViewStack().setIdentity();

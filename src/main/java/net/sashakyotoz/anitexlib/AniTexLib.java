@@ -2,8 +2,10 @@ package net.sashakyotoz.anitexlib;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -31,8 +33,11 @@ public class AniTexLib {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, net.sashakyotoz.anitexlib.ModConfig.SPEC);
         TextureAnimator.addEntityToAnimate(AniTexLib.class,MODID,"entity/pig_animated","pig_animated");
         ModParticleTypes.PARTICLE_TYPES.register(bus);
-        forgeBus.addListener(RenderTypesHandler::onRenderWorldLast);
         ITEMS.register(bus);
+        DistExecutor.unsafeCallWhenOn(Dist.CLIENT,()->()->{
+            forgeBus.addListener(RenderTypesHandler::onRenderWorldLast);
+            return new Object();
+        });
     }
     public static void informUser(String s,boolean isError){
         if (isError)
