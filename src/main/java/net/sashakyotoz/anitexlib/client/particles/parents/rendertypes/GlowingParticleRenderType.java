@@ -1,4 +1,4 @@
-package net.sashakyotoz.anitexlib.client.particles.parents;
+package net.sashakyotoz.anitexlib.client.particles.parents.rendertypes;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -14,14 +14,14 @@ import net.sashakyotoz.anitexlib.utils.render.RenderTypesHandler;
 import net.sashakyotoz.anitexlib.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
-public class FluidParticleRenderType implements ParticleRenderType {
-    public static final FluidParticleRenderType INSTANCE = new FluidParticleRenderType();
+public class GlowingParticleRenderType implements ParticleRenderType {
+    public static final GlowingParticleRenderType INSTANCE = new GlowingParticleRenderType();
 
     private static void beginRenderCommon(BufferBuilder bufferBuilder, TextureManager textureManager) {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(ModConfig.USE_ADVANCED_PARTICLE_RENDERER.get() ? RenderUtils::getFluidShader : RenderSystem::getShader);
+        RenderSystem.setShader(ModConfig.USE_ADVANCED_PARTICLE_RENDERER.get() ? RenderUtils::getGlowingParticleShader : RenderSystem::getShader);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
         RenderTypesHandler.particleMVMatrix = RenderSystem.getModelViewMatrix();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);

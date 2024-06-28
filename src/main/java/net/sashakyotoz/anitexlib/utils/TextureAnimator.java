@@ -16,7 +16,7 @@ public class TextureAnimator {
     public static ArrayList<JsonObject> options = new ArrayList<>();
     private static final HashMap<String, ResourceLocation> locations = new HashMap<>();
     private static final HashMap<String, Integer> frameValue = new HashMap<>();
-
+    private static final Queue<AnimationTask> workQueue = new ConcurrentLinkedQueue<>();
     /**
      * Object mainObject - main class of your mod, (f.e. ExampleMod.class)
      * <p>
@@ -35,7 +35,6 @@ public class TextureAnimator {
             AniTexLib.informUser("JsonObject was added", false);
         }
     }
-
     /**
      * String modId - modid of your mod, (f.e. "examplemod")
      * <p>
@@ -48,29 +47,22 @@ public class TextureAnimator {
      * @return ResourceLocation of texture in textures' set with its current index
      */
     public static ResourceLocation getAnimatedTextureByName(String modId, String path, String name) {
-        JsonObject object;
         if (!options.isEmpty() && options.stream().anyMatch(jsonObject -> jsonObject.get("base_texture_name").getAsString().equals(name))) {
-            object = options.stream()
+            JsonObject object = options.stream()
                     .filter(jsonObject -> jsonObject.get("base_texture_name").getAsString().equals(name))
-                    .findFirst().get();
+                    .findFirst()
+                    .orElseThrow();
             frameValue.putIfAbsent(name, 0);
             locations.putIfAbsent(name, new ResourceLocation(modId, path + name + "0.png"));
             int interval = object.get("interval_of_animation").getAsInt();
             int framesAmount = object.get("amount_of_frames").getAsInt();
-            if (workQueue.size() < 1)
-                queueServerWork(interval, () -> {
-                    frameValue.put(name, frameValue.get(name) < framesAmount - 1 ? frameValue.get(name) + 1 : 0);
-                    locations.put(name, new ResourceLocation(modId, path + name + frameValue.get(name) + ".png"));
-                });
-            return locations.get(name) == null ? new ResourceLocation(modId, path + name + "0.png") : locations.get(name);
-        } else
-            return new ResourceLocation(modId, path + name + "0.png");
-    }
-    /*
-     * Example of returnment for getTextureLocation() in entity renderer
-     */
-    //AnimateOptionsReader.getObjectWithoutUpdate(modId,pEntity.getUUID()) == null ? TextureAnimator.getManagedAnimatedTextureByName(modId,"","",0,20,4,pEntity.getUUID()) : TextureAnimator.getManagedAnimatedTextureByName(modId,null,null,null,null,null,null,pEntity.getUUID());
 
+            queueAnimationTask(name, interval, framesAmount, modId, path);
+            return locations.getOrDefault(name, new ResourceLocation(modId, path + name + "0.png"));
+        } else {
+            return new ResourceLocation(modId, path + name + "0.png");
+        }
+    }
     /**
      * String modId - modid of your mod, (f.e. "examplemod")
      * <p>
@@ -83,14 +75,13 @@ public class TextureAnimator {
      * @return ResourceLocation of texture in textures' set with its current index
      */
     public static ResourceLocation getManagedAnimatedTextureByName(String modId, @Nullable String path, @Nullable String name, @Nullable Boolean toAnimate, @Nullable Integer stopFrame, @Nullable Integer interval, @Nullable Integer countOfFrames, UUID uuid) {
-//        AniTexLib.informUser("Json Object: " + AnimateOptionsReader.manageDynamicJsonObject(modId,path,name,toAnimate,stopFrame,uuid), false);
-        JsonObject object;
         if (path != null && name != null && toAnimate != null && stopFrame != null && interval != null && countOfFrames != null) {
             AnimateOptionsReader.manageDynamicJsonObject(modId, path, name, toAnimate, stopFrame, interval, countOfFrames, uuid);
             return new ResourceLocation(modId, path + name + "0.png");
         } else {
             frameValue.putIfAbsent(uuid.toString(), 0);
-            object = AnimateOptionsReader.getObjectWithoutUpdate(modId, uuid);
+            JsonObject object = AnimateOptionsReader.getObjectWithoutUpdate(modId, uuid);
+
             if (object != null) {
                 int localStopFrame = object.get("stopFrame").getAsInt();
                 int localInterval = object.get("interval_of_animation").getAsInt();
@@ -99,42 +90,59 @@ public class TextureAnimator {
                 String localNameOfTexture = object.get("nameOfTexture").getAsString();
                 String localTextureFolder = object.get("textureFolder").getAsString();
                 locations.putIfAbsent(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + frameValue.get(uuid.toString()) + ".png"));
-                if (workQueue.size() < 1 && haveToContinueAnimation) {
-                    if (localStopFrame > 0)
-                        queueServerWork(localInterval, () -> {
-                            frameValue.put(uuid.toString(), frameValue.get(uuid.toString()) < localStopFrame - 1 ? frameValue.get(uuid.toString()) + 1 : localStopFrame);
-                            locations.put(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + frameValue.get(uuid.toString()) + ".png"));
-                        });
-                    else
-                        queueServerWork(localInterval, () -> {
-                            frameValue.put(uuid.toString(), frameValue.get(uuid.toString()) < framesAmount - 1 ? frameValue.get(uuid.toString()) + 1 : 0);
-                            locations.put(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + frameValue.get(uuid.toString()) + ".png"));
-                        });
-                }
 
-                return locations.get(uuid.toString()) == null ? new ResourceLocation(modId, localTextureFolder + localNameOfTexture + "0.png") : locations.get(uuid.toString());
-            } else
+                if (haveToContinueAnimation)
+                    queueAnimationTask(uuid.toString(), localInterval, localStopFrame > 0 ? localStopFrame : framesAmount, modId, localTextureFolder);
+
+                return locations.getOrDefault(uuid.toString(), new ResourceLocation(modId, localTextureFolder + localNameOfTexture + "0.png"));
+            } else {
                 return null;
+            }
         }
     }
 
-    private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
-
-    public static void queueServerWork(int tick, Runnable action) {
-        workQueue.add(new AbstractMap.SimpleEntry<>(action, tick));
+    private static void queueAnimationTask(String name, int interval, int framesAmount, String modId, String path) {
+        if (workQueue.stream().noneMatch(task -> task.name.equals(name))) {
+            workQueue.add(new AnimationTask(name, interval, framesAmount, modId, path));
+        }
     }
 
     @SubscribeEvent
     public static void tick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
-            workQueue.forEach(work -> {
-                work.setValue(work.getValue() - 1);
-                if (work.getValue() == 0)
-                    actions.add(work);
-            });
-            actions.forEach(e -> e.getKey().run());
-            workQueue.removeAll(actions);
+            List<AnimationTask> completedTasks = new ArrayList<>();
+
+            for (AnimationTask task : workQueue) {
+                task.remainingTicks--;
+                if (task.remainingTicks <= 0) {
+                    frameValue.put(task.name, frameValue.get(task.name) < task.framesAmount - 1 ? frameValue.get(task.name) + 1 : 0);
+                    locations.put(task.name, new ResourceLocation(task.modId, task.path + task.name + frameValue.get(task.name) + ".png"));
+                    task.remainingTicks = task.interval;
+
+                    if (frameValue.get(task.name) == task.framesAmount - 1) {
+                        completedTasks.add(task);
+                    }
+                }
+            }
+            workQueue.removeAll(completedTasks);
+        }
+    }
+
+    private static class AnimationTask {
+        String name;
+        int interval;
+        int framesAmount;
+        String modId;
+        String path;
+        int remainingTicks;
+
+        AnimationTask(String name, int interval, int framesAmount, String modId, String path) {
+            this.name = name;
+            this.interval = interval;
+            this.framesAmount = framesAmount;
+            this.modId = modId;
+            this.path = path;
+            this.remainingTicks = interval;
         }
     }
 }

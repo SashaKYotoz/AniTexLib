@@ -1,10 +1,19 @@
-![Logo](src/main/resources/anitexlib_logo.gif)
+[![](https://cf.way2muchnoise.eu/title/1011434.svg)![](http://cf.way2muchnoise.eu/versions/1011434.svg)![](https://cf.way2muchnoise.eu/full_1011434_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/anitexlib)[![](https://img.shields.io/badge/All--Rights--Reserved-blue)](https://github.com/SashaKYotoz/AniTexLib/blob/master/LICENSE)[![](https://img.shields.io/discord/1155188824360624148?color=Green&label=Discord&logo=Discord&style=flat-square)](https://discord.gg/vjyzphNywy)
+
+Status: **In active development | Stable**
+
+<hr>
 
 # AniTexLib
 
+![Logo](src/main/resources/anitexlib_logo.gif)
+
+# About
+
 A light-weight library mod for Minecraft 1.19+, providing API for animations of mobs' textures
 
-[API doesn't provide any content to Minecraft by its own except configurable pig-exampled-animation]
+[API doesn't provide any content to Minecraft by its own 
+except configurable pig-exampled-animation, 3 particle types and example item]
 
 AniTexLib provides 2 variants of animator - static and dynamic
 
@@ -24,11 +33,10 @@ How to work with animators:
 
 > Extra provided lib stuff:
 - New item implementation to invoke spawn of specific particle, when item lies on ground
-- Sparkle-like and Wisp-like particles and 3 new renderer types
-- Fluid flowing shader type for particles
+- Sparkle-like, Wisp-like and wave-like particles and 3 new renderer types
 
 
 ## Authors
 
-[@sashakyotoz](https://www.github.com/sashakyotoz)
+[SashaKYotoz](https://www.github.com/sashakyotoz)
 

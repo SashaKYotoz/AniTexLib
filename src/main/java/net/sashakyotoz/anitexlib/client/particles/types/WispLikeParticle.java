@@ -5,11 +5,9 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
-import net.sashakyotoz.anitexlib.client.particles.parents.FluidParticleRenderType;
 import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
 import org.antlr.v4.runtime.misc.Triple;
 import org.jetbrains.annotations.NotNull;
@@ -63,8 +61,8 @@ public class WispLikeParticle extends GlowingLikeParticle {
             this.spriteSet = spriteSet;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType typeIn, @NotNull ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            return new WispLikeParticle(worldIn, x, y, z, 0, 0f, 0f, 0, 0.25f, 0.5f, this.spriteSet);
+        public Particle createParticle(@NotNull SimpleParticleType pType, @NotNull ClientLevel pLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new WispLikeParticle(pLevel, x, y, z, 0, 0f, 0f, 1f, 1f, 1f, this.spriteSet);
         }
     }
 }

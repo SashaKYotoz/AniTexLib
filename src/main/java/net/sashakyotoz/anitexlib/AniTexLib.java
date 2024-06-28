@@ -30,8 +30,9 @@ public class AniTexLib {
         MinecraftForge.EVENT_BUS.register(this);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, net.sashakyotoz.anitexlib.ModConfig.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, net.sashakyotoz.anitexlib.ModConfig.SPEC);
         TextureAnimator.addEntityToAnimate(AniTexLib.class,MODID,"entity/pig_animated","pig_animated");
+        TextureAnimator.addEntityToAnimate(AniTexLib.class,MODID,"particle/wave_like","wave");
         ModParticleTypes.PARTICLE_TYPES.register(bus);
         ITEMS.register(bus);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT,()->()->{

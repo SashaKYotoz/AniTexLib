@@ -17,7 +17,10 @@ public class PigRendererMixin {
     public void getTextureLocation(Pig pEntity, CallbackInfoReturnable<ResourceLocation> cir){
         if (ModConfig.TO_SHOW_EXAMPLE.get())
             cir.setReturnValue(TextureAnimator.options.isEmpty() ? new ResourceLocation("textures/entity/pig/pig.png") : TextureAnimator.getAnimatedTextureByName(AniTexLib.MODID,"textures/entity/pig_animated/","pig_animated"));
-//        ResourceLocation tmpLocation = AnimateOptionsReader.getObjectWithoutUpdate(AniTexLib.MODID,pEntity.getUUID()) == null ? TextureAnimator.getManagedAnimatedTextureByName(AniTexLib.MODID,"textures/entity/pig_animated/","pig_animated",pEntity.isOnGround(),0,10,4,pEntity.getUUID()) : TextureAnimator.getManagedAnimatedTextureByName(AniTexLib.MODID,null,null,null,null,null,null,pEntity.getUUID());
-//        cir.setReturnValue(tmpLocation != null ? tmpLocation : new ResourceLocation("textures/entity/pig/pig.png"));
     }
 }
+
+//Example of returnment for getTextureLocation() in entity renderer
+
+//        ResourceLocation tmpLocation = AnimateOptionsReader.getObjectWithoutUpdate(AniTexLib.MODID,pEntity.getUUID()) == null ? TextureAnimator.getManagedAnimatedTextureByName(AniTexLib.MODID,"textures/entity/pig_animated/","pig_animated",pEntity.isOnGround(),0,10,4,pEntity.getUUID()) : TextureAnimator.getManagedAnimatedTextureByName(AniTexLib.MODID,null,null,null,null,null,null,pEntity.getUUID());
+//        cir.setReturnValue(tmpLocation != null ? tmpLocation : new ResourceLocation("textures/entity/pig/pig.png"));

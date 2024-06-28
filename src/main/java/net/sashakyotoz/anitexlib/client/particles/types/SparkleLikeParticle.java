@@ -1,7 +1,5 @@
 package net.sashakyotoz.anitexlib.client.particles.types;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -17,11 +15,6 @@ public class SparkleLikeParticle extends GlowingLikeParticle {
     public static @NotNull SparkleLikeParticle.SparkleProvider provider(SpriteSet spriteSet) {
         return new SparkleLikeParticle.SparkleProvider(spriteSet);
     }
-
-    @Override
-    public void render(VertexConsumer b, Camera info, float pticks) {
-        super.render(b, info, pticks);
-    }
     public static class SparkleProvider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
@@ -29,13 +22,13 @@ public class SparkleLikeParticle extends GlowingLikeParticle {
             this.spriteSet = spriteSet;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType typeIn, @NotNull ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(@NotNull SimpleParticleType pType, @NotNull ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             return new SparkleLikeParticle(worldIn, x, y, z, COLOR.a, COLOR.b, COLOR.c, this.spriteSet);
         }
     }
 
-    public SparkleLikeParticle(ClientLevel world, double x, double y, double z, float r, float g, float b, SpriteSet spriteset) {
-        super(world, x, y, z, r, g, b, spriteset);
+    public SparkleLikeParticle(ClientLevel level, double x, double y, double z, float r, float g, float b, SpriteSet spriteset) {
+        super(level, x, y, z, r, g, b, spriteset);
         LIFETIME_VARIANTS[0] = 20;
         LIFETIME_VARIANTS[1] = 30;
         LIFETIME_VARIANTS[2] = 60;

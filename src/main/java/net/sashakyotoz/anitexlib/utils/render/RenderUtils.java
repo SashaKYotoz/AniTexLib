@@ -3,12 +3,16 @@ package net.sashakyotoz.anitexlib.utils.render;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.sashakyotoz.anitexlib.AniTexLib;
+import org.joml.Matrix4f;
 
 public class RenderUtils {
     public static ShaderInstance GLOWING_SHADER, GLOWING_PARTICLE_SHADER, SPRITE_PARTICLE_SHADER,FLUID_SHADER;
@@ -41,10 +45,10 @@ public class RenderUtils {
     public static final RenderType FLOWING = RenderType.create(
             AniTexLib.MODID + ":flowing",
             DefaultVertexFormat.POSITION_COLOR,
-            VertexFormat.Mode.QUADS, 256, true, false,
+            VertexFormat.Mode.TRIANGLE_STRIP, 256, true, false,
             RenderType.CompositeState.builder()
                     .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
-                    .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(true))
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setShaderState(new RenderStateShard.ShaderStateShard(RenderUtils::getFluidShader))
                     .createCompositeState(false)
@@ -63,6 +67,6 @@ public class RenderUtils {
                     .createCompositeState(false));
     public static ShaderInstance getGlowingShader() { return GLOWING_SHADER; }
     public static ShaderInstance getGlowingParticleShader() { return GLOWING_PARTICLE_SHADER; }
-    public static ShaderInstance getSpriteParticleShader() { return SPRITE_PARTICLE_SHADER; }
     public static ShaderInstance getFluidShader() { return FLUID_SHADER; }
+
 }
