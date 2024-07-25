@@ -13,7 +13,7 @@ Status: **In active development | Stable**
 A light-weight library mod for Minecraft 1.19+, providing API for animations of mobs' textures
 
 [API doesn't provide any content to Minecraft by its own 
-except configurable pig-exampled-animation, 3 particle types and example item]
+except configurable pig-exampled-animation, 5 particle types and example item]
 
 AniTexLib provides 2 variants of animator - static and dynamic
 
@@ -35,6 +35,7 @@ How to work with animators:
 - New item implementation to invoke spawn of specific particle, when item lies on ground
 - Sparkle-like, Wisp-like and wave-like particles and 3 new renderer types
 
+> Note: Used renderer system of particles like wisp | sparkle, was partially implemented from [Wizards Reborn](https://github.com/MaxBogomol/WizardsReborn)
 
 ## Authors
 

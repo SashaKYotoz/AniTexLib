@@ -1,4 +1,4 @@
-package net.sashakyotoz.anitexlib.client.particles.parents.types;
+package net.sashakyotoz.anitexlib.client.particles.parents.options;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public record WaveParticleOption(float roll,float scale,float redColor,float greenColor,float blueColor) implements ParticleOptions {
     public static final Codec<WaveParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.FLOAT.fieldOf("roll").forGetter(WaveParticleOption::roll),
+            Codec.FLOAT.fieldOf("criticalAngle").forGetter(WaveParticleOption::roll),
             Codec.FLOAT.fieldOf("scale").forGetter(WaveParticleOption::scale),
             Codec.FLOAT.fieldOf("redColor").forGetter(WaveParticleOption::redColor),
             Codec.FLOAT.fieldOf("greenColor").forGetter(WaveParticleOption::greenColor),
@@ -38,7 +38,7 @@ public record WaveParticleOption(float roll,float scale,float redColor,float gre
 
         public WaveParticleOption fromNetwork(ParticleType<WaveParticleOption> type, FriendlyByteBuf byteBuf) {
             CompoundTag tag = byteBuf.readNbt();
-            float roll = tag.getFloat("roll");
+            float roll = tag.getFloat("criticalAngle");
             float scale = tag.getFloat("scale");
             float r = tag.getFloat("red");
             float g = tag.getFloat("green");
@@ -49,7 +49,7 @@ public record WaveParticleOption(float roll,float scale,float redColor,float gre
 
     public void writeToNetwork(FriendlyByteBuf pBuffer) {
         CompoundTag tag = new CompoundTag();
-        tag.putFloat("roll", this.roll);
+        tag.putFloat("criticalAngle", this.roll);
         tag.putFloat("scale", this.scale);
         tag.putFloat("red", this.redColor);
         tag.putFloat("green", this.greenColor);

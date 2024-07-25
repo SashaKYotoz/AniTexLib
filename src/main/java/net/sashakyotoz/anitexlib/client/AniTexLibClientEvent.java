@@ -10,10 +10,9 @@ import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.sashakyotoz.anitexlib.AniTexLib;
-import net.sashakyotoz.anitexlib.client.particles.types.SparkleLikeParticle;
-import net.sashakyotoz.anitexlib.client.particles.types.WaveLikeParticle;
-import net.sashakyotoz.anitexlib.client.particles.types.WispLikeParticle;
+import net.sashakyotoz.anitexlib.client.particles.types.*;
 import net.sashakyotoz.anitexlib.client.particles.types.models.CircleParticleModel;
+import net.sashakyotoz.anitexlib.client.particles.types.models.CubeParticleModel;
 import net.sashakyotoz.anitexlib.registries.ModParticleTypes;
 import net.sashakyotoz.anitexlib.utils.render.RenderUtils;
 
@@ -38,10 +37,13 @@ public class AniTexLibClientEvent {
         event.registerSpriteSet(ModParticleTypes.SPARK_LIKE_PARTICLE.get(), SparkleLikeParticle::provider);
         event.registerSpriteSet(ModParticleTypes.WISP_LIKE_PARTICLE.get(), WispLikeParticle::provider);
         event.registerSpriteSet(ModParticleTypes.WAVE_LIKE_PARTICLE.get(), WaveLikeParticle::provider);
+        event.registerSpriteSet(ModParticleTypes.CIRCLE_LIKE_PARTICLE.get(), CircleLikeParticle::provider);
+        event.registerSpriteSet(ModParticleTypes.CUBE_LIKE_PARTICLE.get(), CubeLikeParticle::provider);
     }
 
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(CircleParticleModel.LAYER_LOCATION, CircleParticleModel::createBodyLayer);
+        event.registerLayerDefinition(CubeParticleModel.LAYER_LOCATION, CubeParticleModel::createBodyLayer);
     }
 }

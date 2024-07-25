@@ -10,6 +10,9 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.loading.targets.FMLDataUserdevLaunchHandler;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -35,10 +38,8 @@ public class AniTexLib {
         TextureAnimator.addEntityToAnimate(AniTexLib.class,MODID,"particle/wave_like","wave");
         ModParticleTypes.PARTICLE_TYPES.register(bus);
         ITEMS.register(bus);
-        DistExecutor.unsafeCallWhenOn(Dist.CLIENT,()->()->{
+        if (FMLEnvironment.dist.isClient())
             forgeBus.addListener(RenderTypesHandler::onRenderWorldLast);
-            return new Object();
-        });
     }
     public static void informUser(String s,boolean isError){
         if (isError)

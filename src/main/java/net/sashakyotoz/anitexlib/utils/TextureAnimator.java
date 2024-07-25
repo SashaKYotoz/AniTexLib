@@ -10,13 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 @Mod.EventBusSubscriber
 public class TextureAnimator {
     public static ArrayList<JsonObject> options = new ArrayList<>();
     private static final HashMap<String, ResourceLocation> locations = new HashMap<>();
     private static final HashMap<String, Integer> frameValue = new HashMap<>();
     private static final Queue<AnimationTask> workQueue = new ConcurrentLinkedQueue<>();
+
     /**
      * Object mainObject - main class of your mod, (f.e. ExampleMod.class)
      * <p>
@@ -32,9 +32,10 @@ public class TextureAnimator {
         JsonObject jsonObject = AnimateOptionsReader.getObjectOfTexturesSet(aClass, modId, textureFolder, nameOfTexture);
         if (jsonObject != null) {
             options.add(jsonObject);
-            AniTexLib.informUser("JsonObject was added", false);
+            AniTexLib.informUser(String.format("JsonObject with modid: %s and name: %s was added", modId, nameOfTexture), false);
         }
     }
+
     /**
      * String modId - modid of your mod, (f.e. "examplemod")
      * <p>
@@ -63,6 +64,7 @@ public class TextureAnimator {
             return new ResourceLocation(modId, path + name + "0.png");
         }
     }
+
     /**
      * String modId - modid of your mod, (f.e. "examplemod")
      * <p>
@@ -108,17 +110,15 @@ public class TextureAnimator {
     }
 
     @SubscribeEvent
-    public static void tick(TickEvent.ServerTickEvent event) {
+    public static void tick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             List<AnimationTask> completedTasks = new ArrayList<>();
-
             for (AnimationTask task : workQueue) {
                 task.remainingTicks--;
                 if (task.remainingTicks <= 0) {
                     frameValue.put(task.name, frameValue.get(task.name) < task.framesAmount - 1 ? frameValue.get(task.name) + 1 : 0);
                     locations.put(task.name, new ResourceLocation(task.modId, task.path + task.name + frameValue.get(task.name) + ".png"));
                     task.remainingTicks = task.interval;
-
                     if (frameValue.get(task.name) == task.framesAmount - 1) {
                         completedTasks.add(task);
                     }

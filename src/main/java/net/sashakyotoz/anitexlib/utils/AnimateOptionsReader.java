@@ -29,7 +29,7 @@ public class AnimateOptionsReader {
      * @return JsonObject of properties for animation of textures' set
      */
     protected static JsonObject getObjectOfTexturesSet(Class<?> mainClass, String modId, String textureFolder, String nameOfTexture) {
-        AniTexLib.informUser("code gets jsonObject", false);
+        AniTexLib.informUser(String.format("Code gets jsonObject, with modid: %s and name: %s",modId,nameOfTexture), false);
         String path = String.format("%s/assets/%s/textures/%s/%s.png.json", mainClass, modId, textureFolder, nameOfTexture);
         InputStream stream = mainClass.getResourceAsStream("/assets/" + modId + "/textures/" + textureFolder + "/" + nameOfTexture + ".png.json");
 //        InputStream stream = AniTexLib.class.getResourceAsStream("/assets/" + AniTexLib.MODID + "/textures/" + "entity/pig_animated" + "/" + "pig_animated" + ".png.json");
@@ -59,7 +59,7 @@ public class AnimateOptionsReader {
      */
     protected static JsonObject manageDynamicJsonObject(String modId, String textureFolder, String nameOfTexture, boolean condition, int stopFrame, Integer interval, Integer countOfFrames, UUID entityUUID) {
         JsonObject jsonObject;
-        AniTexLib.informUser("code gets dynamic jsonObject", false);
+        AniTexLib.informUser(String.format("Code gets dynamic jsonObject, with modid: %s and name: %s",modId,nameOfTexture), false);
         Path configDir = FMLPaths.GAMEDIR.get().resolve(modId);
         Path CONTROLLERS_PATH = configDir.resolve("animations_controller.json");
         createOrUpdateJson(modId, textureFolder, nameOfTexture, condition, stopFrame,interval,countOfFrames, entityUUID);
