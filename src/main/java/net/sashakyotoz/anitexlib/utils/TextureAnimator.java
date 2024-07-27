@@ -2,6 +2,10 @@ package net.sashakyotoz.anitexlib.utils;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,7 +39,6 @@ public class TextureAnimator {
             AniTexLib.informUser(String.format("JsonObject with modid: %s and name: %s was added", modId, nameOfTexture), false);
         }
     }
-
     /**
      * String modId - modid of your mod, (f.e. "examplemod")
      * <p>
@@ -101,6 +104,15 @@ public class TextureAnimator {
                 return null;
             }
         }
+    }
+
+    /**
+     * intensity by default - 0.1F
+     * @return uses instead of alpha parameter in renderer of model to make blinking effect
+     */
+    public static float simpleAlphaFunction(float intensity,float pAgeInTicks){
+        intensity = intensity <= 0 ? 0.1F : intensity;
+        return Math.max(0.0F, Mth.cos(pAgeInTicks * intensity) * 0.5F);
     }
 
     private static void queueAnimationTask(String name, int interval, int framesAmount, String modId, String path) {

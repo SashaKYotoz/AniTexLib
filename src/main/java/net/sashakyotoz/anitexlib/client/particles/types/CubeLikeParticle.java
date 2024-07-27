@@ -1,7 +1,6 @@
 package net.sashakyotoz.anitexlib.client.particles.types;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -23,7 +22,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.sashakyotoz.anitexlib.AniTexLib;
 import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
 import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
-import net.sashakyotoz.anitexlib.client.particles.types.models.CircleParticleModel;
 import net.sashakyotoz.anitexlib.client.particles.types.models.CubeParticleModel;
 import org.antlr.v4.runtime.misc.Triple;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +55,7 @@ public class CubeLikeParticle extends GlowingLikeParticle {
         float lifeProgress = 0.25f;
         if (this.age % 5 == 0){
             lifeProgress = random.nextFloat() + age > 10 ? age/100f+0.1f : age/10f;
-            quadSize+=RandomSource.create().nextBoolean() ? 0.15f : -0.1f;
+            quadSize+=0.05f;
         }
         float r = Mth.lerp(lifeProgress, 0, this.END_COLOR.a);
         float g = Mth.lerp(lifeProgress, 0, this.END_COLOR.b);
@@ -73,7 +71,7 @@ public class CubeLikeParticle extends GlowingLikeParticle {
         LIFETIME_VARIANTS[2] = 45;
         this.lifetime = LIFETIME_VARIANTS[RandomSource.create().nextIntBetweenInclusive(0,LIFETIME_VARIANTS.length-1)];
         this.setAlpha(0.5f);
-        this.quadSize = 0.25f;
+        this.quadSize = 0.5f;
         new CubeRenderSequence(this);
     }
     private static class CubeRenderSequence {
@@ -95,7 +93,7 @@ public class CubeLikeParticle extends GlowingLikeParticle {
                     double y = Mth.lerp(event.getPartialTick(), particle.yo, particle.y) - camPos.y();
                     double z = Mth.lerp(event.getPartialTick(), particle.zo, particle.z) - camPos.z();
                     event.getPoseStack().pushPose();
-                    event.getPoseStack().translate(x, y - particle.quadSize > 0.3f || particle.quadSize < 0.1f ? particle.quadSize : 0, z);
+                    event.getPoseStack().translate(x, y, z);
                     event.getPoseStack().scale(particle.quadSize,particle.quadSize,particle.quadSize);
                     model.renderToBuffer(event.getPoseStack(), consumer, particle.getLightColor(event.getPartialTick()), OverlayTexture.NO_OVERLAY, particle.rCol, particle.gCol, particle.bCol, particle.alpha);
                     event.getPoseStack().popPose();

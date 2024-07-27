@@ -56,7 +56,7 @@ public class WaveLikeParticle extends TextureSheetParticle {
     private static class WaveRenderSequence {
         private final WaveLikeParticle particle;
 
-        private class WaveRenderer {
+        private class WaveRenderer{
             public final EntityModel<Entity> model = new CircleParticleModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(CircleParticleModel.LAYER_LOCATION));
 
             public WaveRenderer() {
