@@ -45,9 +45,10 @@ public class CircleLikeParticle extends TextureSheetParticle {
     }
 
     public void animateColor() {
-        float r = Mth.lerp(0.15f + age/40f, 0, this.END_COLOR.a);
-        float g = Mth.lerp(0.15f + age/40f, 0, this.END_COLOR.b);
-        float b = Mth.lerp(0.15f + age/40f, 0, this.END_COLOR.c);
+        float delta = 0.15f + age/40f;
+        float r = Mth.lerp(delta, 0, this.END_COLOR.a);
+        float g = Mth.lerp(delta, 0, this.END_COLOR.b);
+        float b = Mth.lerp(delta, 0, this.END_COLOR.c);
         this.setColor(r, g, b);
     }
 

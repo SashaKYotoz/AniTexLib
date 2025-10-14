@@ -3,9 +3,11 @@ package net.sashakyotoz.anitexlib.utils;
 import com.google.gson.*;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.sashakyotoz.anitexlib.AniTexLib;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -25,9 +25,9 @@ public record ColorableParticleOption(String type, float redColor, float greenCo
     @Override
     public ParticleType<?> getType() {
         return switch (type) {
-            default -> ModParticleTypes.WISP_LIKE_PARTICLE.get();
             case "sparkle" -> ModParticleTypes.SPARK_LIKE_PARTICLE.get();
             case "cube" -> ModParticleTypes.CUBE_LIKE_PARTICLE.get();
+            default -> ModParticleTypes.WISP_LIKE_PARTICLE.get();
         };
     }
 

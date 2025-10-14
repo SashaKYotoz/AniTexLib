@@ -3,7 +3,6 @@ package net.sashakyotoz.anitexlib.registries;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -23,7 +22,7 @@ public class ModParticleTypes {
     public static final RegistryObject<ParticleType<ColorableParticleOption>> CUBE_LIKE_PARTICLE = registerParticle("cube_like",true,ColorableParticleOption.DESERIALIZER,(particleType)-> ColorableParticleOption.CODEC);
 
     public static <T extends ParticleOptions> RegistryObject<ParticleType<T>> registerParticle(String pKey, boolean pOverrideLimiter, ParticleOptions.Deserializer<T> pDeserializer, final Function<ParticleType<T>, Codec<T>> pCodecFactory) {
-        return PARTICLE_TYPES.register(pKey, () -> new ParticleType<T>(pOverrideLimiter, pDeserializer) {
+        return PARTICLE_TYPES.register(pKey, () -> new ParticleType<>(pOverrideLimiter, pDeserializer) {
             @Override
             public Codec<T> codec() {
                 return pCodecFactory.apply(this);
