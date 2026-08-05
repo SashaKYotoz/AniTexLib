@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "anitexlib",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/anitexlib",
+    "sources": "https://github.com/SashaKYotoz/AniTexLib"
+  },
+  "license": "${license}",
+  "icon": "assets/anitexlib/anitexlib.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.sashakyotoz.anitexlib.AniTexLibFabric"
+    ],
+    "client": [
+      "net.sashakyotoz.anitexlib.client.AniTexLibFabricClient"
+    ]
+  },
+  "mixins": [
+    "anitexlib.mixins.json",
+    "anitexlib.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
+  

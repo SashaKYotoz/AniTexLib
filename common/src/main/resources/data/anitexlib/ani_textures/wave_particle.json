@@ -1,0 +1,5 @@
+{
+  "location": "anitexlib:textures/particle/wave_like/wave_0.png",
+  "amount_of_frames" : 6,
+  "animation_interval" : 3
+}
