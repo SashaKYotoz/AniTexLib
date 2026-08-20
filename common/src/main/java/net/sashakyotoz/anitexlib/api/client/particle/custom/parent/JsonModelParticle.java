@@ -1,6 +1,5 @@
 package net.sashakyotoz.anitexlib.api.client.particle.custom.parent;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
@@ -13,7 +12,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -41,10 +39,14 @@ public abstract class JsonModelParticle extends Particle {
 
     public abstract ResourceLocation getTexture(float partialTicks);
 
+    protected ModelResourceLocation getBakedModelLocation() {
+        return this.bakedModelLocation;
+    }
+
     @Override
     public void render(VertexConsumer ignoredBuffer, Camera camera, float partialTicks) {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
-        BakedModel model = modelManager.getModel(this.bakedModelLocation);
+        BakedModel model = modelManager.getModel(this.getBakedModelLocation());
 
         if (model == modelManager.getMissingModel()) return;
 

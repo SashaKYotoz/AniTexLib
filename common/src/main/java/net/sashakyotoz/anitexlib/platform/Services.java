@@ -3,7 +3,6 @@ package net.sashakyotoz.anitexlib.platform;
 import net.sashakyotoz.anitexlib.Constants;
 import net.sashakyotoz.anitexlib.platform.services.IPlatformHelper;
 
-import java.util.Iterator;
 import java.util.ServiceLoader;
 
 public class Services {

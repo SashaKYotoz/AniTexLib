@@ -6,13 +6,11 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.sashakyotoz.anitexlib.Constants;
 import net.sashakyotoz.anitexlib.api.client.particle.ParticleModelRegistry;
 import net.sashakyotoz.anitexlib.api.client.particle.custom.parent.JsonModelParticle;
 import net.sashakyotoz.anitexlib.api.client.particle.options.ColorableParticleOption;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
 public class CubeLikeParticle extends JsonModelParticle {
     public Integer[] LIFETIME_VARIANTS = {15, 30, 45};

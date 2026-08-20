@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.sashakyotoz.anitexlib.api.client.AniTexLibClientRegs;
 import net.sashakyotoz.anitexlib.api.client.render.type.RenderTypeHandler;
-import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 public class GlowingParticleRenderType implements ParticleRenderType {
