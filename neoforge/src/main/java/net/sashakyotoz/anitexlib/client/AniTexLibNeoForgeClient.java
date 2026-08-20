@@ -1,26 +1,26 @@
 package net.sashakyotoz.anitexlib.client;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.sashakyotoz.anitexlib.api.client.AniTexLibClientRegs;
 import net.sashakyotoz.anitexlib.api.client.particle.ParticleModelRegistry;
 import net.sashakyotoz.anitexlib.api.client.particle.custom.*;
 import net.sashakyotoz.anitexlib.api.client.render.shader.ShaderHandler;
 import net.sashakyotoz.anitexlib.api.common.AniTexLibRegs;
-import net.sashakyotoz.anitexlib.platform.ForgeRenderTypeRegistrar;
+import net.sashakyotoz.anitexlib.platform.NeoForgeRenderTypeRegistrar;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class AniTexLibForgeClient {
+@EventBusSubscriber(value = Dist.CLIENT)
+public class AniTexLibNeoForgeClient {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> AniTexLibClientRegs.Types.registerTypes(new ForgeRenderTypeRegistrar()));
+        event.enqueueWork(() -> AniTexLibClientRegs.Types.registerTypes(new NeoForgeRenderTypeRegistrar()));
     }
 
     @SubscribeEvent

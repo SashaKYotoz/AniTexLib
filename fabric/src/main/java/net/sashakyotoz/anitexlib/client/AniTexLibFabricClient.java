@@ -18,7 +18,9 @@ public class AniTexLibFabricClient implements ClientModInitializer {
 
         CoreShaderRegistrationCallback.EVENT.register(context -> ShaderHandler.registerShaders(context::register));
 
-        ModelLoadingPlugin.register(pluginContext -> ParticleModelRegistry.getAllModelLocations().forEach(pluginContext::addModels));
+        ModelLoadingPlugin.register(pluginContext ->
+                ParticleModelRegistry.getAllModelLocations().forEach(pluginContext::addModels)
+        );
 
         ParticleFactoryRegistry.getInstance().register(AniTexLibRegs.Particles.SPARK_LIKE_PARTICLE, SparkleLikeParticle::provider);
         ParticleFactoryRegistry.getInstance().register(AniTexLibRegs.Particles.WISP_LIKE_PARTICLE, WispLikeParticle::provider);

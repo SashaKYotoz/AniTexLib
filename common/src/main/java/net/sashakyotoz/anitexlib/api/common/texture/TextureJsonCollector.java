@@ -10,6 +10,7 @@ import net.sashakyotoz.anitexlib.api.common.AniTexLibRegs;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @ApiStatus.Internal
 public class TextureJsonCollector {
@@ -21,7 +22,6 @@ public class TextureJsonCollector {
      */
     public void preload(ResourceManager manager) {
         AniTexLibRegs.TEXTURE_ANIMATOR.clear();
-
         for (Map.Entry<ResourceLocation, Resource> entry : manager.listResources("ani_textures",
                 path -> path.toString().endsWith(".json")).entrySet()) {
 

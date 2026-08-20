@@ -25,28 +25,38 @@ import java.util.List;
 
 public abstract class JsonModelParticle extends Particle {
 
-    protected final ModelResourceLocation bakedModelLocation;
+    protected final ResourceLocation baseModelLocation;
 
-    public JsonModelParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, ModelResourceLocation bakedModelLocation) {
+    public JsonModelParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, ResourceLocation baseModelLocation) {
         super(level, x, y, z);
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
-        this.bakedModelLocation = bakedModelLocation;
+        this.baseModelLocation = baseModelLocation;
     }
 
     public abstract void setupTransformations(PoseStack poseStack, float partialTicks);
 
     public abstract ResourceLocation getTexture(float partialTicks);
 
-    protected ModelResourceLocation getBakedModelLocation() {
-        return this.bakedModelLocation;
+    protected ResourceLocation getBaseModelLocation() {
+        return this.baseModelLocation;
+    }
+
+    protected BakedModel getBakedModel(ModelManager modelManager) {
+        ModelResourceLocation neoLoc = new ModelResourceLocation(this.baseModelLocation, "standalone");
+        BakedModel model = modelManager.getModel(neoLoc);
+        if (model != modelManager.getMissingModel()) {
+            return model;
+        }
+        ModelResourceLocation fabricLoc = new ModelResourceLocation(this.baseModelLocation, "fabric_resource");
+        return modelManager.getModel(fabricLoc);
     }
 
     @Override
     public void render(VertexConsumer ignoredBuffer, Camera camera, float partialTicks) {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
-        BakedModel model = modelManager.getModel(this.getBakedModelLocation());
+        BakedModel model = getBakedModel(modelManager);
 
         if (model == modelManager.getMissingModel()) return;
 
@@ -101,13 +111,12 @@ public abstract class JsonModelParticle extends Particle {
                 float relativeU = (absoluteU - sprite.getU0()) / spriteWidth;
                 float relativeV = (absoluteV - sprite.getV0()) / spriteHeight;
 
-                consumer.vertex(pose.pose(), vx, vy, vz)
-                        .color(r, g, b, a)
-                        .uv(relativeU, relativeV)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(light)
-                        .normal(pose.normal(), nx, ny, nz)
-                        .endVertex();
+                consumer.addVertex(pose.pose(), vx, vy, vz)
+                        .setColor(r, g, b, a)
+                        .setUv(relativeU, relativeV)
+                        .setOverlay(OverlayTexture.NO_OVERLAY)
+                        .setLight(light)
+                        .setNormal(pose, nx, ny, nz);
             }
         }
     }

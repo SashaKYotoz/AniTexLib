@@ -1,8 +1,10 @@
 package net.sashakyotoz.anitexlib.api.common;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.sashakyotoz.anitexlib.Constants;
 import net.sashakyotoz.anitexlib.api.client.particle.options.CircleParticleOption;
@@ -17,21 +19,22 @@ public class AniTexLibRegs {
     public static final TextureAnimator TEXTURE_ANIMATOR = TextureAnimator.INSTANCE;
 
     public static class Particles {
-        public static final ParticleType<ColorableParticleOption> SPARK_LIKE_PARTICLE = create(true, ColorableParticleOption.DESERIALIZER, type -> ColorableParticleOption.CODEC);
-        public static final ParticleType<ColorableParticleOption> WISP_LIKE_PARTICLE = create(true, ColorableParticleOption.DESERIALIZER, type -> ColorableParticleOption.CODEC);
-        public static final ParticleType<WaveParticleOption> WAVE_LIKE_PARTICLE = create(true, WaveParticleOption.DESERIALIZER, type -> WaveParticleOption.CODEC);
-        public static final ParticleType<CircleParticleOption> CIRCLE_LIKE_PARTICLE = create(true, CircleParticleOption.DESERIALIZER, type -> CircleParticleOption.CODEC);
-        public static final ParticleType<ColorableParticleOption> CUBE_LIKE_PARTICLE = create(true, ColorableParticleOption.DESERIALIZER, type -> ColorableParticleOption.CODEC);
+        public static final ParticleType<ColorableParticleOption> SPARK_LIKE_PARTICLE = create(true, particle -> ColorableParticleOption.CODEC, type -> ColorableParticleOption.STREAM_CODEC);
+        public static final ParticleType<ColorableParticleOption> WISP_LIKE_PARTICLE = create(true, particle -> ColorableParticleOption.CODEC, type -> ColorableParticleOption.STREAM_CODEC);
+        public static final ParticleType<WaveParticleOption> WAVE_LIKE_PARTICLE = create(true, particle -> WaveParticleOption.CODEC, type -> WaveParticleOption.STREAM_CODEC);
+        public static final ParticleType<CircleParticleOption> CIRCLE_LIKE_PARTICLE = create(true, particle -> CircleParticleOption.CODEC, type -> CircleParticleOption.STREAM_CODEC);
+        public static final ParticleType<ColorableParticleOption> CUBE_LIKE_PARTICLE = create(true, particle -> ColorableParticleOption.CODEC, type -> ColorableParticleOption.STREAM_CODEC);
 
-        private static <T extends ParticleOptions> ParticleType<T> create(
-                boolean overrideLimiter,
-                ParticleOptions.Deserializer<T> deserializer,
-                Function<ParticleType<T>, Codec<T>> codecFactory
-        ) {
-            return new ParticleType<>(overrideLimiter, deserializer) {
+        public static <T extends ParticleOptions> ParticleType<T> create(boolean pOverrideLimiter, Function<ParticleType<T>, MapCodec<T>> pDeserializer, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> pCodecFactory) {
+            return new ParticleType<T>(pOverrideLimiter) {
                 @Override
-                public Codec<T> codec() {
-                    return codecFactory.apply(this);
+                public MapCodec<T> codec() {
+                    return pDeserializer.apply(this);
+                }
+
+                @Override
+                public StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec() {
+                    return pCodecFactory.apply(this);
                 }
             };
         }
